@@ -1,0 +1,18 @@
+listenAddressSingleHTTPFrontend: 0.0.0.0:1337
+
+logLevel: "INFO"
+
+checkForUpdates: true
+
+actions:
+  - title: "Hello world!"
+    shell: echo 'Hello World!'
+
+  - title: Start it-tools
+    icon: box
+    shell: docker start it-tools
+
+  - title: Stop it-tools
+    icon: box
+    shell: docker stop it-tools
+
