@@ -1,18 +1,62 @@
 listenAddressSingleHTTPFrontend: 0.0.0.0:1337
 
-logLevel: "INFO"
+logLevel: "DEBUG"
 
-checkForUpdates: true
+checkForUpdates: false
+
+sectionNavigationStyle: "topbar"
 
 actions:
-  - title: "Hello world!"
-    shell: echo 'Hello World!'
+  - title: docker logs
+    icon: <iconify-icon icon="vscode-icons:file-type-log" width="2em" height="2em"></iconify-icon>
+    shell: docker logs -n 20 "{{ container_name }}"
+    arguments:
+      - name: container_name
+        choices:
+          - title: beszel
+            value: beszel
 
-  - title: Start it-tools
-    icon: box
-    shell: docker start it-tools
+  - title: Start {{ container.Names }}
+    icon: '<iconify-icon icon="pepicons-pop:power-circle-filled" width="1.2em" height="1.2em"  style="color: #82ed50"></iconify-icon>'
+    shell: docker start {{ container.Names }}
+    entity: container
+    trigger: Update container entity file
 
-  - title: Stop it-tools
-    icon: box
-    shell: docker stop it-tools
+  - title: Stop {{ container.Names }}
+    icon: '<iconify-icon icon="pepicons-pop:power-circle-filled" width="1.2em" height="1.2em"  style="color: #ff2020"></iconify-icon>'
+    shell: docker stop {{ container.Names }}
+    entity: container
+    trigger: Update container entity file
 
+  - title: Restart {{ container.Names }}
+    icon: <iconify-icon icon="solar:restart-square-bold" width="1.2em" height="1.2em"></iconify-icon>
+    shell: docker restart {{ container.Names }}
+    entity: container
+    trigger: Update container entity file
+
+  - title: Update container entity file
+    shell: 'docker ps -a --format json > /etc/OliveTin/entities/containers.json'
+    hidden: true
+    execOnStartup: true
+    execOnCron: '*/5 * * * *'
+
+entities:
+  - file: /etc/OliveTin/entities/containers.json
+    name: container
+
+dashboards:
+  - title: DockerContainers
+    contents:
+      - title: ' '
+        entity: container
+        type: fieldset
+        contents:
+          - type: display
+            title: |
+              <iconify-icon icon="vscode-icons:file-type-docker2" width="3em" height="3em"></iconify-icon><strong>{{ container.Names }}</strong>{{ container.Image }}
+          - title: 'Start {{ container.Names }}'
+          - title: 'Stop {{ container.Names }}'
+          - title: 'Restart {{ container.Names }}'
+          - type: display
+            title: |
+              <iconify-icon icon="logos:statuspage" width="2.71em" height="2em"></iconify-icon><strong>{{ container.State }}</strong>{{ container.RunningFor }}

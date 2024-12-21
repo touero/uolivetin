@@ -8,6 +8,7 @@ services:
     volumes:
       - ./config.yaml:/config/config.yaml
       - /var/run/docker.sock:/var/run/docker.sock
+      - ./entities:/etc/OliveTin/entities
 
     ports:
       - "1337:1337"
