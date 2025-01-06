@@ -7,14 +7,15 @@ checkForUpdates: false
 sectionNavigationStyle: "topbar"
 
 actions:
-  - title: docker logs
+  - title: Docker Logs Beszel
+    popupOnStart: execution-dialog-stdout-only
     icon: <iconify-icon icon="vscode-icons:file-type-log" width="2em" height="2em"></iconify-icon>
-    shell: docker logs -n 20 "{{ container_name }}"
-    arguments:
-      - name: container_name
-        choices:
-          - title: beszel
-            value: beszel
+    shell: docker logs -n 20 beszel
+
+  - title: Check Disk
+    popupOnStart: execution-dialog-stdout-only
+    icon: <iconify-icon icon="icon-park:disk" width="2em" height="2em"></iconify-icon>
+    shell: df -HT
 
   - title: Start {{ container.Names }}
     icon: '<iconify-icon icon="pepicons-pop:power-circle-filled" width="1.2em" height="1.2em"  style="color: #82ed50"></iconify-icon>'
@@ -59,4 +60,4 @@ dashboards:
           - title: 'Restart {{ container.Names }}'
           - type: display
             title: |
-              <iconify-icon icon="logos:statuspage" width="2.71em" height="2em"></iconify-icon><strong>{{ container.State }}</strong>{{ container.RunningFor }}
+              <iconify-icon icon="logos:statuspage" width="2.71em" height="2em"></iconify-icon><strong>{{ container.State }}</strong>{{ container.Status }}
